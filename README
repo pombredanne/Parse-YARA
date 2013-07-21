@@ -1,0 +1,6 @@
+Parse::YARA v0.01_01
+====================
+
+Module to parse YARA rules file, find rules and related rules or create rules.
+
+See INSTALL for now.

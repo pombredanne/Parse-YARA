@@ -1,0 +1,14 @@
+Makefile.PL
+Changes
+INSTALL
+LICENSE
+MANIFEST
+README
+lib/Parse/YARA.pm
+t/FromYARADocumentation.txt
+t/MalwareRules.txt
+t/OutputComparison.txt
+t/PackerRules.txt
+t/Parse-YARA.t
+t/pod-coverage.t
+t/pod.t

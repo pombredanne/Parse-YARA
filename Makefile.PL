@@ -13,10 +13,10 @@ WriteMakefile(
     LICENSE           => 'Apache_2_0',
     MIN_PERL_VERSION  => '5.005',
     PREREQ_PM         => {
-							Carp => 0,
-							Tie::IxHash => 0,
-							File::Basename => 0,
-                            Test::More => 0
+							'Carp' => 0,
+							'Tie::IxHash' => 0,
+							'File::Basename' => 0,
+                            'Test::More' => 0
     },
     dist              => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean             => { FILES => 'Parse-YARA-*' },

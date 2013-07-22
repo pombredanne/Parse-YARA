@@ -1,3 +1,6 @@
+//
+// This rules file was taken from the Yara website for testing purposes (http://code.google.com/p/yara-project/wiki/MalwareRules)
+//
 rule BadBoy
 {
 	strings:

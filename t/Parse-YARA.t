@@ -85,7 +85,9 @@ ok($parse_string_ruleset->as_string eq $rule_string);
 my $comparison_file_as_string = '';
 open(COMPARISON_FILE, '<', 't/OutputComparison.txt');
 while(<COMPARISON_FILE>) {
+    if(!/^\/\/.*/) {
         $comparison_file_as_string .= $_; 
+    }
 }
 close(COMPARISON_FILE);
 

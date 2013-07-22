@@ -698,7 +698,6 @@ sub set_condition {
             $self->{rules}->{$rule_id}->{condition} = $condition;
         }
     } else {
-        print $rule_id . "\n";
         carp("$rule_id: can't set a null condition");
     }
 }

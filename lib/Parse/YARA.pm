@@ -6,7 +6,7 @@ use Carp qw(carp);
 use Tie::IxHash;
 use File::Basename;
 
-our $VERSION = '0.01_01';
+our $VERSION = '0.01';
 
 =head1 NAME
 

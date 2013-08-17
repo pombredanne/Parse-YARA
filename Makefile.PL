@@ -11,6 +11,11 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Parse/YARA.pm',
     ABSTRACT_FROM     => 'lib/Parse/YARA.pm',
     LICENSE           => 'Apache_2_0',
+    META_MERGE        => {
+                            'resources' => {
+                                            'repository'  =>  'https://github.com/moofusecurity/Parse-YARA',
+                            },
+    },
     MIN_PERL_VERSION  => '5.005',
     PREREQ_PM         => {
 							'Carp' => 0,

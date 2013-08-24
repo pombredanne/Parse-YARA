@@ -13,6 +13,7 @@ BEGIN { use_ok('Parse::YARA') };
 
 #########################
 use Parse::YARA;
+use Tie::IxHash;
 $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "Parse::YARA"); };
 
 # Test new();
@@ -20,7 +21,9 @@ my $empty_ruleset = Parse::YARA->new();
 isa_ok($empty_ruleset, 'Parse::YARA');
 
 # Generate the rule hash we would expect to return for most of our tests
-my $rule_hash = {
+my $rule_hash;
+my $rule_hash_knot = tie(%{$rule_hash}, 'Tie::IxHash');
+$rule_hash = {
                  'include' => 1,
                  'rules' => {
                               'test_rule' => {
@@ -126,29 +129,27 @@ $file_ruleset->position_rule('ExternalVariableExample2', 'after', 'ExternalVaria
 ok($file_ruleset->{rules_knot}->Indices('ExternalVariableExample2') > $file_ruleset->{rules_knot}->Indices('ExternalVariableExample3'));
 
 # Generate a hashref to use as testing
-my $rule_element_hashref = {
-                            modifier => 'global',
-                            rule_id => 'test_rule',
-                            tag => [
-                                    'tag1',
-                                    'tag2'
-                                   ],
-                            meta => {
-                                        'meta_name2' => 'meta_val2',
-                                        'meta_name1' => 'meta_val1'
-                                    },
-                            strings => {
-                                        '$str_name2' => {
-                                                            value => 'str_val2',
-                                                            type => 'text',
-                                                        },
-                                        '$str_name1' => {
-                                                            value => 'str_val1',
-                                                            type => 'text'
-                                                        },
-                                       },
-                            condition => 'true'
-                           };
+my $rule_element_hashref;
+my $rule_element_hashref_knot = tie(%{$rule_element_hashref}, 'Tie::IxHash');
+my $meta_hashref;
+my $meta_hashref_knot = tie(%{$meta_hashref}, 'Tie::IxHash');
+my $strings_hashref;
+my $strings_hashref_knot = tie(%{$strings_hashref}, 'Tie::IxHash');
+$meta_hashref->{meta_name2} = 'meta_val2';
+$meta_hashref->{meta_name1} = 'meta_val1';
+$strings_hashref->{'$str_name2'} = { value => 'str_val2', type => 'text' };
+$strings_hashref->{'$str_name1'} = { value => 'str_val1', type => 'text' };
+$rule_element_hashref = {
+                         modifier => 'global',
+                         rule_id => 'test_rule',
+                         tag => [
+                                 'tag1',
+                                 'tag2'
+                                ],
+                         meta => $meta_hashref,
+                         strings => $strings_hashref,
+                         condition => 'true'
+                        };
 
 # Test creating a rule calling new(rulehash => $rule_element_hashref) on the above hash ref
 my $hash_ruleset = Parse::YARA->new(rulehash => $rule_element_hashref);

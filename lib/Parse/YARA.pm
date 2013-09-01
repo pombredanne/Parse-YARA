@@ -6,7 +6,7 @@ use Carp qw(carp);
 use Tie::IxHash;
 use File::Basename;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 NAME
 
@@ -14,7 +14,7 @@ Parse::YARA - Parse and create YARA rules
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -101,6 +101,38 @@ Version 0.01
 	$rule_obj->remove_anonymous_string('new_rule', 'anonymous');
 	$rule_obj->remove_string('new_rule', '$string2');
 	print $rule_obj->as_string;
+
+=head1 NOTE FOR PERL >= 5.18
+
+Hash order will not be guaranteed so the use of Tie::IxHash is required for passing hashes into the module if order within the YARA rule is required.
+
+For the example given above, the following steps would need to be taken:
+
+    use Tie::IxHash;
+    my $rule_element_hashref;
+    my $rule_element_hashref_knot = tie(%{$rule_element_hashref}, 'Tie::IxHash');
+    my $meta_hashref;
+    my $meta_hashref_knot = tie(%{$meta_hashref}, 'Tie::IxHash');
+    my $strings_hashref;
+    my $strings_hashref_knot = tie(%{$strings_hashref}, 'Tie::IxHash');
+    $meta_hashref->{info} = 'sample hash rule';
+    $meta_hashref->{site} = 'http://search.cpan.org/~moofu/';
+    $strings_hashref->{'$'} = { value => 'anon1', type => 'text' };
+    $strings_hashref->{'$$'} = { value => 'anon2', type => 'text' };
+    $strings_hashref->{'$test_string'}= { value => 'test_string', type => 'text' };
+    $strings_hashref->{'$test_hex_string'} = { value => '{ AA BB CC DD }', type => 'hex' };
+    $strings_hashref->{'$test_regex_string'} = { value => '/.*/', type => 'regex' };
+    $rule_element_hashref = { 
+                             modifier => 'private',
+                             rule_id => 'sample_hash_rule_tied',
+                             tag => [
+                                     'tag1',
+                                     'tag2'
+                                    ],  
+                             meta => $meta_hashref,
+                             strings => $strings_hashref,
+                             condition => 'true'
+                            }; 
 
 =cut
 

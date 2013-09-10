@@ -249,6 +249,9 @@ sub _init {
         # then add it to the new rules object
         if($args{rulehash}->{rule_id}) {
             my $rule_id = $args{rulehash}->{rule_id};
+            if(length($rule_id) > 128) {
+                croak("Rule id too long (" . length($rule_id) . "): $rule_id");
+            }
             delete($args{rulehash}->{rule_id});
             # Loop through the remaining components of the rulehash
             # and add them to the rules object
@@ -442,6 +445,11 @@ sub parse {
             $rule_id = $2;
             $rule_data->{$rule_id}->{modifier} = $1;
             $rule_data->{$rule_id}->{tags} = $3;
+            # Make sure the rule_id isn't too long
+            if(length($rule_id) > 128) {
+                carp("Cannot use rule identifier > 128 chars: $rule_id is " . length($rule_id));
+                next;
+            }
             # Make sure we don't set the rule_id to a YARA reserved word
             if($self->_check_reserved($rule_id, 'rule_id')) {
                 carp("Cannot use reserved word as rule identifier: $rule_id");
